@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:quiztoyou/common_widgets/customButtom.dart';
+import 'package:quiztoyou/common_widgets/socialButton.dart';
 
 class SignInPage extends StatelessWidget {
   const SignInPage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         actions: [],
         title: Text('QuizToYou Sign-in'),
         elevation: 2.0,
       ),
-      body: _builContent(),
+      body: _builContent(size),
       backgroundColor: Colors.grey[200],
     );
   }
 
-  Widget _builContent() {
+  Widget _builContent(Size size) {
     return Padding(
       padding: EdgeInsets.all(16),
       child: Column(
@@ -35,13 +36,15 @@ class SignInPage extends StatelessWidget {
             ),
           ),
           SizedBox(height: 48),
-          CustomButtom(
+          SocialButton(
+            size: size,
             text: 'Sign in with Google',
             onPressed: () {},
             icon: Icon(FontAwesomeIcons.google),
           ),
           SizedBox(height: 8),
-          CustomButtom(
+          SocialButton(
+            size: size,
             text: 'Sign in with Apple',
             textColor: Colors.white,
             buttonColor: Colors.black87,
@@ -52,7 +55,8 @@ class SignInPage extends StatelessWidget {
             ),
           ),
           SizedBox(height: 8),
-          CustomButtom(
+          SocialButton(
+            size: size,
             text: 'Sign in with Facebook',
             textColor: Colors.white,
             buttonColor: Color(0xFF333D92),
@@ -63,7 +67,8 @@ class SignInPage extends StatelessWidget {
             ),
           ),
           SizedBox(height: 8),
-          CustomButtom(
+          SocialButton(
+            size: size,
             text: 'Sign in with Email',
             textColor: Colors.white,
             onPressed: () {},
@@ -80,7 +85,8 @@ class SignInPage extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           SizedBox(height: 8),
-          CustomButtom(
+          SocialButton(
+            size: size,
             text: 'Go anonymous',
             onPressed: () {},
             buttonColor: Colors.lime[300],
