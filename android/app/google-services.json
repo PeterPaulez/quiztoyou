@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "796076700332",
+    "project_id": "quiztoyou-ef7e3",
+    "storage_bucket": "quiztoyou-ef7e3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:796076700332:android:fc6efe5178decb2c37a509",
+        "android_client_info": {
+          "package_name": "com.peterpaulez.quiztoyou"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "796076700332-6q6sbgbslb7s8bjc3cu0t7g72jgnpgb6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLQL_NzLrIWAjiUNF9XgtWUWz2RNsK_JY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "796076700332-6q6sbgbslb7s8bjc3cu0t7g72jgnpgb6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
