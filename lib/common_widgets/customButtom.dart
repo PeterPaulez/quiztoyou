@@ -13,10 +13,10 @@ class CustomButtom extends StatelessWidget {
     this.textColor: Colors.black87,
     this.textSize: 15.0,
     this.borderRadius: 6.0,
-    @required this.text,
-    @required this.onPressed,
-    @required this.child,
-  }) : assert(text != null);
+    required this.text,
+    required this.onPressed,
+    required this.child,
+  });
 
   @override
   Widget build(BuildContext context) {

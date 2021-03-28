@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:quiztoyou/common_widgets/socialButton.dart';
 
 class SignInPage extends StatelessWidget {
-  const SignInPage({Key key}) : super(key: key);
+  const SignInPage();
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +72,7 @@ class SignInPage extends StatelessWidget {
             text: 'Sign in with Email',
             textColor: Colors.white,
             onPressed: () {},
-            buttonColor: Colors.teal[700],
+            buttonColor: Colors.teal.shade700,
             icon: Icon(
               FontAwesomeIcons.mailBulk,
               color: Colors.white,
@@ -89,7 +89,7 @@ class SignInPage extends StatelessWidget {
             size: size,
             text: 'Go anonymous',
             onPressed: () {},
-            buttonColor: Colors.lime[300],
+            buttonColor: Colors.lime.shade300,
             icon: Icon(FontAwesomeIcons.glasses),
           ),
         ],
