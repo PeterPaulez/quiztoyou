@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:quiztoyou/common_widgets/socialButton.dart';
+import 'package:quiztoyou/app/sign_in/socialButton.dart';
 
 class SignInPage extends StatelessWidget {
   const SignInPage();

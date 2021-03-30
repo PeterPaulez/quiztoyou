@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:quiztoyou/app/sign_in/signInPage.dart';
+import 'package:quiztoyou/app/landing.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'QuizToYou App',
       theme: ThemeData(primaryColor: Colors.pinkAccent),
-      home: SignInPage(),
+      home: LandingPage(),
     );
   }
 }
