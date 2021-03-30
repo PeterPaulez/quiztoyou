@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'QuizToYou App',
-      theme: ThemeData(primarySwatch: Colors.pink),
+      theme: ThemeData(primaryColor: Colors.pinkAccent),
       home: SignInPage(),
     );
   }

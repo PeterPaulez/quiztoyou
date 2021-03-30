@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:quiztoyou/common_widgets/socialButton.dart';
@@ -17,6 +18,15 @@ class SignInPage extends StatelessWidget {
       body: _builContent(size),
       backgroundColor: Colors.grey[200],
     );
+  }
+
+  void _signInAnonymously() async {
+    try {
+      final userCredentials = await FirebaseAuth.instance.signInAnonymously();
+      print('SignIn userUID: ${userCredentials.user?.uid}');
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   Widget _builContent(Size size) {
@@ -88,7 +98,7 @@ class SignInPage extends StatelessWidget {
           SocialButton(
             size: size,
             text: 'Go anonymous',
-            onPressed: () {},
+            onPressed: _signInAnonymously,
             buttonColor: Colors.lime.shade300,
             icon: Icon(FontAwesomeIcons.glasses),
           ),
