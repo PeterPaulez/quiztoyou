@@ -4,7 +4,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:quiztoyou/app/sign_in/socialButton.dart';
 
 class SignInPage extends StatelessWidget {
-  const SignInPage();
+  const SignInPage({required this.onSignIn});
+  final void Function(User) onSignIn;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,8 @@ class SignInPage extends StatelessWidget {
   void _signInAnonymously() async {
     try {
       final userCredentials = await FirebaseAuth.instance.signInAnonymously();
-      print('SignIn userUID: ${userCredentials.user?.uid}');
+      print('LogIn');
+      onSignIn(userCredentials.user!);
     } catch (e) {
       print(e.toString());
     }

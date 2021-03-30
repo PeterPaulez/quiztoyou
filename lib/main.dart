@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'QuizToYou App',
       theme: ThemeData(primaryColor: Colors.pinkAccent),
+      darkTheme: ThemeData(primaryColor: Colors.deepPurpleAccent),
       home: LandingPage(),
     );
   }
