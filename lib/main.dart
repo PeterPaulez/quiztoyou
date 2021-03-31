@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:quiztoyou/app/landing.dart';
+import 'package:quiztoyou/services/auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,7 +17,10 @@ class MyApp extends StatelessWidget {
       title: 'QuizToYou App',
       theme: ThemeData(primaryColor: Colors.pinkAccent),
       darkTheme: ThemeData(primaryColor: Colors.deepPurpleAccent),
-      home: LandingPage(),
+      home: LandingPage(
+        // It's not possible to pass Abstract class
+        auth: AuthFireBase(),
+      ),
     );
   }
 }
