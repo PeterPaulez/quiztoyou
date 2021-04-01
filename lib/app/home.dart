@@ -3,19 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:quiztoyou/services/auth.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({
-    Key? key,
-    required this.onSignOut,
-    required this.auth,
-  }) : super(key: key);
-  final VoidCallback onSignOut;
+  const HomePage({Key? key, required this.auth}) : super(key: key);
   final AuthBase auth;
 
   void _signOut() async {
     try {
       await auth.signOut();
       print('LogOUT');
-      onSignOut();
     } catch (e) {
       print(e.toString());
     }
@@ -23,7 +17,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    User _user = FirebaseAuth.instance.currentUser!;
+    User? _user = FirebaseAuth.instance.currentUser;
     return Scaffold(
         appBar: AppBar(
           actions: [
@@ -40,7 +34,7 @@ class HomePage extends StatelessWidget {
         body: Container(
           color: Colors.white,
           child: SafeArea(
-            child: Text('Hola: ${_user.uid}'),
+            child: Text('Hola: ${_user?.uid}'),
           ),
         ));
   }

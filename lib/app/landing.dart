@@ -4,46 +4,34 @@ import 'package:quiztoyou/app/home.dart';
 import 'package:quiztoyou/app/sign_in/signIn.dart';
 import 'package:quiztoyou/services/auth.dart';
 
-class LandingPage extends StatefulWidget {
+class LandingPage extends StatelessWidget {
   final AuthBase auth;
   const LandingPage({Key? key, required this.auth}) : super(key: key);
 
   @override
-  _LandingPageState createState() => _LandingPageState();
-}
-
-class _LandingPageState extends State<LandingPage> {
-  User? _user;
-
-  @override
-  void initState() {
-    super.initState();
-    _updateUser(widget.auth.currentUser);
-  }
-
-  void _updateUser(User? user) {
-    setState(() {
-      _user = user;
-      if (_user != null) {
-        print('UID ${_user?.uid}');
-      } else {
-        print('UID nullValue');
-      }
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    if (_user == null) {
-      return SignInPage(
-        onSignIn: (user) => _updateUser(user),
-        auth: widget.auth,
-      );
-    }
+    return StreamBuilder<User?>(
+      stream: auth.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.active) {
+          final User? user = snapshot.data;
+          if (user == null) {
+            return SignInPage(
+              auth: auth,
+            );
+          }
 
-    return HomePage(
-      onSignOut: () => _updateUser(null),
-      auth: widget.auth,
+          // Signed USER
+          return HomePage(
+            auth: auth,
+          );
+        }
+
+        // While retrieving DATA
+        return Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        );
+      },
     );
   }
 }
