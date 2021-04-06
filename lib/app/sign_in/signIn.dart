@@ -30,6 +30,15 @@ class SignInPage extends StatelessWidget {
     }
   }
 
+  void _signInGoogle() async {
+    try {
+      await auth.signInGoogle();
+      print('LogIn');
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   Widget _builContent(Size size) {
     return Padding(
       padding: EdgeInsets.all(16),
@@ -50,7 +59,7 @@ class SignInPage extends StatelessWidget {
           SocialButton(
             size: size,
             text: 'Sign in with Google',
-            onPressed: () {},
+            onPressed: _signInGoogle,
             icon: Icon(FontAwesomeIcons.google),
           ),
           SizedBox(height: 8),

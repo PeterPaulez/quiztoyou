@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "796076700332-0qsqii477scte8g8aau15hus69hurin9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.peterpaulez.quiztoyou",
+            "certificate_hash": "3264a69129320e11fefcc2bb593d423a999e853f"
+          }
+        },
+        {
           "client_id": "796076700332-6q6sbgbslb7s8bjc3cu0t7g72jgnpgb6.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +37,13 @@
             {
               "client_id": "796076700332-6q6sbgbslb7s8bjc3cu0t7g72jgnpgb6.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "796076700332-0va501k2h8eqt9j5ugag2t8g42gd7s14.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.peterpaulez.quiztoyou"
+              }
             }
           ]
         }
