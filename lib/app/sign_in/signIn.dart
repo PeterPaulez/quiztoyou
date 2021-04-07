@@ -39,6 +39,15 @@ class SignInPage extends StatelessWidget {
     }
   }
 
+  void _signInFacebook() async {
+    try {
+      await auth.signInFacebook();
+      print('LogIn');
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   Widget _builContent(Size size) {
     return Padding(
       padding: EdgeInsets.all(16),
@@ -80,7 +89,7 @@ class SignInPage extends StatelessWidget {
             text: 'Sign in with Facebook',
             textColor: Colors.white,
             buttonColor: Color(0xFF333D92),
-            onPressed: () {},
+            onPressed: _signInFacebook,
             icon: Icon(
               FontAwesomeIcons.facebook,
               color: Colors.white,
