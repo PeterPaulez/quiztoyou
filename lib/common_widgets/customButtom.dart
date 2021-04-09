@@ -2,18 +2,16 @@ import 'package:flutter/material.dart';
 
 class CustomButtom extends StatelessWidget {
   final Color buttonColor;
-  final Color textColor;
-  final double textSize;
-  final String text;
   final double borderRadius;
   final VoidCallback onPressed;
   final Widget child;
+  final double elevation;
+  final double height;
   CustomButtom({
     this.buttonColor: Colors.white,
-    this.textColor: Colors.black87,
-    this.textSize: 15.0,
     this.borderRadius: 6.0,
-    required this.text,
+    this.elevation: 5,
+    this.height: 48,
     required this.onPressed,
     required this.child,
   });
@@ -22,8 +20,8 @@ class CustomButtom extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialButton(
       splashColor: Colors.transparent,
-      height: 48,
-      elevation: 5,
+      height: this.height,
+      elevation: this.elevation,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(this.borderRadius)),
       ),

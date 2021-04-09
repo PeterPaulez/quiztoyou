@@ -12,7 +12,6 @@ class SocialButton extends CustomButtom {
     required Size size,
   }) : super(
           buttonColor: buttonColor,
-          text: text,
           onPressed: onPressed,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
