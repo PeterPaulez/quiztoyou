@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:quiztoyou/app/sign_in/emailSignIn.dart';
 import 'package:quiztoyou/app/sign_in/socialButton.dart';
 import 'package:quiztoyou/services/auth.dart';
+import 'package:transitioner/transitioner.dart';
 
 class SignInPage extends StatelessWidget {
   const SignInPage({required this.auth});
@@ -16,7 +18,7 @@ class SignInPage extends StatelessWidget {
         title: Text('QuizToYou Sign-in'),
         elevation: 2.0,
       ),
-      body: _builContent(size),
+      body: _builContent(size, context),
       backgroundColor: Colors.grey[200],
     );
   }
@@ -48,7 +50,16 @@ class SignInPage extends StatelessWidget {
     }
   }
 
-  Widget _builContent(Size size) {
+  void _signInWithEmail(BuildContext context) {
+    Transitioner(
+      child: EmailSignInPage(),
+      context: context,
+      animation: AnimationType.slideRight,
+      curveType: CurveType.decelerate,
+    );
+  }
+
+  Widget _builContent(Size size, BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(16),
       child: Column(
@@ -100,7 +111,7 @@ class SignInPage extends StatelessWidget {
             size: size,
             text: 'Sign in with Email',
             textColor: Colors.white,
-            onPressed: () {},
+            onPressed: () => _signInWithEmail(context),
             buttonColor: Colors.teal.shade700,
             icon: Icon(
               FontAwesomeIcons.mailBulk,
