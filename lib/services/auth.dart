@@ -6,6 +6,8 @@ abstract class AuthBase {
   // Implemented by AuthFireBase, doesn't need any sync option
   User? get currentUser;
   Future<User> signInAnonymously();
+  Future<User?> signInEmail(String email, String password);
+  Future<User?> createUserWithEmail(String email, String password);
   Stream<User?> authStateChanges();
   Future<User?> signInGoogle();
   Future<User?> signInFacebook();
@@ -25,6 +27,26 @@ class AuthFireBase implements AuthBase {
   Future<User> signInAnonymously() async {
     final userCredential = await _firebaseAuth.signInAnonymously();
     return userCredential.user!;
+  }
+
+  @override
+  Future<User?> signInEmail(String email, String password) async {
+    final userCredendial = await _firebaseAuth.signInWithCredential(
+      EmailAuthProvider.credential(
+        email: email,
+        password: password,
+      ),
+    );
+    return userCredendial.user;
+  }
+
+  @override
+  Future<User?> createUserWithEmail(String email, String password) async {
+    final userCredendial = await _firebaseAuth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    return userCredendial.user;
   }
 
   @override

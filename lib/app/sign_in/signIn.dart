@@ -52,7 +52,7 @@ class SignInPage extends StatelessWidget {
 
   void _signInWithEmail(BuildContext context) {
     Transitioner(
-      child: EmailSignInPage(),
+      child: EmailSignInPage(auth: auth),
       context: context,
       animation: AnimationType.slideRight,
       curveType: CurveType.decelerate,
