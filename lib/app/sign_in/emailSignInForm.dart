@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:quiztoyou/app/sign_in/formButton.dart';
 import 'package:quiztoyou/common_widgets/dialog.dart';
 import 'package:quiztoyou/services/auth.dart';
@@ -15,6 +16,8 @@ class EmailSignInForm extends StatefulWidget {
 class _EmailSignInFormState extends State<EmailSignInForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
+  final FocusNode _emailFocusNode = FocusNode();
+  final FocusNode _passFocusNode = FocusNode();
   EmailFormType _formType = EmailFormType.signIn;
   String get _email => _emailController.text;
   String get _password => _passController.text;
@@ -53,6 +56,10 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
     }
   }
 
+  void _emailEditingComplete() {
+    FocusScope.of(context).requestFocus(_passFocusNode);
+  }
+
   List<Widget> _buildChildren(Size size) {
     final buttonText =
         (_formType == EmailFormType.signIn) ? 'Sign in' : 'Create an account';
@@ -62,17 +69,24 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
     return [
       TextField(
         controller: _emailController,
+        focusNode: _emailFocusNode,
         decoration: InputDecoration(
           labelText: 'Email',
           hintText: 'test@test.com',
         ),
+        autocorrect: false,
+        keyboardType: TextInputType.emailAddress,
+        textInputAction: TextInputAction.next,
+        onEditingComplete: _emailEditingComplete,
       ),
       TextField(
         controller: _passController,
+        focusNode: _passFocusNode,
         decoration: InputDecoration(
           labelText: 'Password',
         ),
         obscureText: true,
+        textInputAction: TextInputAction.done,
       ),
       SizedBox(
         height: 24,
@@ -80,6 +94,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       FormButton(
         onPressed: this._submit,
         text: buttonText,
+        textSize: 18,
       ),
       SizedBox(
         height: 8,
