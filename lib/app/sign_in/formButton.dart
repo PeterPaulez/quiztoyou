@@ -7,7 +7,7 @@ class FormButton extends CustomButtom {
     Color textColor: Colors.white,
     double textSize: 16.0,
     required String text,
-    required VoidCallback onPressed,
+    required VoidCallback? onPressed,
   }) : super(
           buttonColor: buttonColor,
           onPressed: onPressed,

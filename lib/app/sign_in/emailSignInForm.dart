@@ -66,6 +66,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
     final adviceText = (_formType == EmailFormType.signIn)
         ? 'Need an account? Register!'
         : 'Have an account? Sign in!';
+    bool submitEnabled = _email.isNotEmpty && _password.isNotEmpty;
     return [
       TextField(
         controller: _emailController,
@@ -78,6 +79,9 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         keyboardType: TextInputType.emailAddress,
         textInputAction: TextInputAction.next,
         onEditingComplete: _emailEditingComplete,
+        onChanged: (value) {
+          setState(() {});
+        },
       ),
       TextField(
         controller: _passController,
@@ -87,12 +91,15 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         ),
         obscureText: true,
         textInputAction: TextInputAction.done,
+        onChanged: (value) {
+          setState(() {});
+        },
       ),
       SizedBox(
         height: 24,
       ),
       FormButton(
-        onPressed: this._submit,
+        onPressed: submitEnabled ? this._submit : null,
         text: buttonText,
         textSize: 18,
       ),
