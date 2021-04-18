@@ -1,5 +1,3 @@
-import 'dart:html';
-
 abstract class StringValidator {
   bool isValid(String value);
 }
@@ -14,4 +12,6 @@ class NonEmptyStringValidator implements StringValidator {
 class EmailAnPasswordValidators {
   final StringValidator emailValidator = NonEmptyStringValidator();
   final StringValidator passwordValidator = NonEmptyStringValidator();
+  final String invalidEmailErrorText = 'Email can\'t be empty';
+  final String invalidPasswordErrorText = 'Password can\'t be empty';
 }

@@ -67,8 +67,9 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
     final adviceText = (_formType == EmailFormType.signIn)
         ? 'Need an account? Register!'
         : 'Have an account? Sign in!';
-    bool submitEnabled = widget.emailValidator.isValid(_email) &&
-        widget.emailValidator.isValid(_password);
+    bool emailValid = widget.emailValidator.isValid(_email);
+    bool passwordValid = widget.passwordValidator.isValid(_password);
+    bool submitEnabled = emailValid && passwordValid;
 
     return [
       TextField(
@@ -77,6 +78,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         decoration: InputDecoration(
           labelText: 'Email',
           hintText: 'test@test.com',
+          errorText: emailValid ? null : widget.invalidEmailErrorText,
         ),
         autocorrect: false,
         keyboardType: TextInputType.emailAddress,
@@ -91,6 +93,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         focusNode: _passFocusNode,
         decoration: InputDecoration(
           labelText: 'Password',
+          errorText: passwordValid ? null : widget.invalidPasswordErrorText,
         ),
         obscureText: true,
         textInputAction: TextInputAction.done,
