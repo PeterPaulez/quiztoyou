@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:quiztoyou/app/sign_in/formButton.dart';
+import 'package:quiztoyou/app/sign_in/validators.dart';
 import 'package:quiztoyou/common_widgets/dialog.dart';
 import 'package:quiztoyou/services/auth.dart';
 
 enum EmailFormType { signIn, register }
 
-class EmailSignInForm extends StatefulWidget {
+class EmailSignInForm extends StatefulWidget with EmailAnPasswordValidators {
   EmailSignInForm({required this.auth});
   final AuthBase auth;
   @override
@@ -66,7 +67,9 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
     final adviceText = (_formType == EmailFormType.signIn)
         ? 'Need an account? Register!'
         : 'Have an account? Sign in!';
-    bool submitEnabled = _email.isNotEmpty && _password.isNotEmpty;
+    bool submitEnabled = widget.emailValidator.isValid(_email) &&
+        widget.emailValidator.isValid(_password);
+
     return [
       TextField(
         controller: _emailController,
