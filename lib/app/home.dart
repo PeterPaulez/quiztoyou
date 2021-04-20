@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:quiztoyou/models/character.dart';
 import 'package:quiztoyou/services/auth.dart';
-import 'package:flutter_card_swipper/flutter_card_swiper.dart';
+import 'package:quiztoyou/services/card_swiper.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key, required this.auth}) : super(key: key);
@@ -69,24 +70,48 @@ class HomePage extends StatelessWidget {
       ),
       body: Center(
         child: Container(
-            width: 300,
-            height: 500,
+            width: double.infinity,
             child: Container(
-              padding: EdgeInsets.all(15),
-              color: Colors.black,
+              padding: EdgeInsets.all(2),
+              //color: Colors.black,
               child: Swiper(
+                layout: SwiperLayout.STACK,
+                itemWidth: 300,
+                itemHeight: 700,
                 index: 0,
                 itemBuilder: (BuildContext context, int index) {
-                  return Image.network(
-                    "https://via.placeholder.com/300x500",
-                    fit: BoxFit.fill,
+                  final Character character = characters[index];
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(25),
+                    child: Container(
+                      color: Color(character.color),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(5, 30, 5, 10),
+                            child: Text(
+                              '${index + 1}. ${character.title}',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            child: Image.asset(character.avatar),
+                            height: 500,
+                          ),
+                        ],
+                      ),
+                    ),
                   );
                 },
                 //autoplay: true,
-                itemCount: 10,
-                scrollDirection: Axis.vertical,
-                pagination: SwiperPagination(alignment: Alignment.centerRight),
-                control: SwiperControl(),
+                itemCount: characters.length,
+                //scrollDirection: Axis.vertical,
+                //pagination: SwiperPagination(alignment: Alignment.centerRight),
+                //control: SwiperControl(),
               ),
             )),
       ),

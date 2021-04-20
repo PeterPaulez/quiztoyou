@@ -22,6 +22,8 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   EmailFormType _formType = EmailFormType.signIn;
   String get _email => _emailController.text;
   String get _password => _passController.text;
+  bool _submittedForm = false;
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +38,16 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   }
 
   Future<void> _submit() async {
+    setState(() {
+      _submittedForm = true;
+      // With the Dialog is not need but its a good idea to block and disabled everything in
+      // the form once you submit it: inputs, button and link are disabled
+      _isLoading = true;
+    });
     print('Email: ${_emailController.text} :: Pass: ${_passController.text}');
     ProgressDialog.show(context);
     try {
+      //await Future.delayed(Duration(seconds: 2)); // Test Dialog
       if (_formType == EmailFormType.signIn) {
         await widget.auth.signInEmail(_email, _password);
       } else {
@@ -54,11 +63,20 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         content: err.toString(),
       );
       print('Error ${err.toString()}');
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
   void _emailEditingComplete() {
-    FocusScope.of(context).requestFocus(_passFocusNode);
+    // Input text button to NEXT
+    // If the email is not valid FOCUS keeps on EMAIL field
+    final newFocus = widget.emailValidator.isValid(_email)
+        ? _passFocusNode
+        : _emailFocusNode;
+    FocusScope.of(context).requestFocus(newFocus);
   }
 
   List<Widget> _buildChildren(Size size) {
@@ -69,7 +87,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         : 'Have an account? Sign in!';
     bool emailValid = widget.emailValidator.isValid(_email);
     bool passwordValid = widget.passwordValidator.isValid(_password);
-    bool submitEnabled = emailValid && passwordValid;
+    bool submitEnabled = emailValid && passwordValid && !_isLoading;
 
     return [
       TextField(
@@ -78,7 +96,10 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         decoration: InputDecoration(
           labelText: 'Email',
           hintText: 'test@test.com',
-          errorText: emailValid ? null : widget.invalidEmailErrorText,
+          errorText: (!emailValid && _submittedForm)
+              ? widget.invalidEmailErrorText
+              : null,
+          enabled: _isLoading == false,
         ),
         autocorrect: false,
         keyboardType: TextInputType.emailAddress,
@@ -93,7 +114,10 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         focusNode: _passFocusNode,
         decoration: InputDecoration(
           labelText: 'Password',
-          errorText: passwordValid ? null : widget.invalidPasswordErrorText,
+          errorText: (!passwordValid && _submittedForm)
+              ? widget.invalidPasswordErrorText
+              : null,
+          enabled: _isLoading == false,
         ),
         obscureText: true,
         textInputAction: TextInputAction.done,
@@ -113,7 +137,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         height: 8,
       ),
       TextButton(
-        onPressed: _toogleFormType,
+        onPressed: !_isLoading ? _toogleFormType : null,
         child: Text(
           adviceText,
           textAlign: TextAlign.center,
@@ -128,6 +152,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
 
   void _toogleFormType() {
     setState(() {
+      _submittedForm = false;
       _formType = (_formType == EmailFormType.signIn)
           ? EmailFormType.register
           : EmailFormType.signIn;
