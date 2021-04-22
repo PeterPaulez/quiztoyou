@@ -59,8 +59,9 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       ProgressDialog.dissmiss(context);
       TextDialog.alert(
         context,
-        title: 'Error',
+        title: 'Form submit Failed',
         content: err.toString(),
+        textOK: 'Ok',
       );
       print('Error ${err.toString()}');
     } finally {

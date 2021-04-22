@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:quiztoyou/common_widgets/dialog.dart';
 import 'package:quiztoyou/models/character.dart';
 import 'package:quiztoyou/services/auth.dart';
 import 'package:quiztoyou/services/card_swiper.dart';
@@ -14,6 +15,21 @@ class HomePage extends StatelessWidget {
       print('LogOUT');
     } catch (e) {
       print(e.toString());
+    }
+  }
+
+  Future<void> _confirmSignOut(BuildContext context) async {
+    final didRequestSignOut = await TextDialog.alert(
+      context,
+      title: 'Logout',
+      content: 'Are you sure that you want to logout?',
+      textOK: 'Logout',
+      textNOK: 'Cancel',
+    );
+    print('Hello: $didRequestSignOut');
+    if (didRequestSignOut == true) {
+      print('Hello');
+      _signOut();
     }
   }
 
@@ -55,7 +71,7 @@ class HomePage extends StatelessWidget {
               Icons.logout,
               color: Colors.white,
             ),
-            onPressed: _signOut,
+            onPressed: () => _confirmSignOut(context),
           ),
         ],
         title: Column(
