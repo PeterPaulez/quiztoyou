@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:quiztoyou/app/sign_in/emailSignIn.dart';
 import 'package:quiztoyou/app/sign_in/socialButton.dart';
 import 'package:quiztoyou/services/auth.dart';
 import 'package:transitioner/transitioner.dart';
 
 class SignInPage extends StatelessWidget {
-  const SignInPage({required this.auth});
-  final AuthBase auth;
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -23,7 +21,7 @@ class SignInPage extends StatelessWidget {
     );
   }
 
-  void _signInAnonymously() async {
+  void _signInAnonymously(AuthBase auth) async {
     try {
       await auth.signInAnonymously();
       print('LogIn');
@@ -32,7 +30,7 @@ class SignInPage extends StatelessWidget {
     }
   }
 
-  void _signInGoogle() async {
+  void _signInGoogle(AuthBase auth) async {
     try {
       await auth.signInGoogle();
       print('LogIn');
@@ -41,7 +39,7 @@ class SignInPage extends StatelessWidget {
     }
   }
 
-  void _signInFacebook() async {
+  void _signInFacebook(AuthBase auth) async {
     try {
       await auth.signInFacebook();
       print('LogIn');
@@ -50,9 +48,9 @@ class SignInPage extends StatelessWidget {
     }
   }
 
-  void _signInWithEmail(BuildContext context) {
+  void _signInWithEmail(BuildContext context, AuthBase auth) {
     Transitioner(
-      child: EmailSignInPage(auth: auth),
+      child: EmailSignInPage(),
       context: context,
       animation: AnimationType.slideRight,
       curveType: CurveType.decelerate,
@@ -60,6 +58,7 @@ class SignInPage extends StatelessWidget {
   }
 
   Widget _builContent(Size size, BuildContext context) {
+    final auth = Provider.of<AuthBase>(context, listen: false);
     return Padding(
       padding: EdgeInsets.all(16),
       child: Column(
@@ -79,7 +78,7 @@ class SignInPage extends StatelessWidget {
           SocialButton(
             size: size,
             text: 'Sign in with Google',
-            onPressed: _signInGoogle,
+            onPressed: () => _signInGoogle(auth),
             icon: Icon(FontAwesomeIcons.google),
           ),
           SizedBox(height: 8),
@@ -100,7 +99,7 @@ class SignInPage extends StatelessWidget {
             text: 'Sign in with Facebook',
             textColor: Colors.white,
             buttonColor: Color(0xFF333D92),
-            onPressed: _signInFacebook,
+            onPressed: () => _signInFacebook(auth),
             icon: Icon(
               FontAwesomeIcons.facebook,
               color: Colors.white,
@@ -111,7 +110,7 @@ class SignInPage extends StatelessWidget {
             size: size,
             text: 'Sign in with Email',
             textColor: Colors.white,
-            onPressed: () => _signInWithEmail(context),
+            onPressed: () => _signInWithEmail(context, auth),
             buttonColor: Colors.teal.shade700,
             icon: Icon(
               FontAwesomeIcons.mailBulk,
@@ -128,7 +127,7 @@ class SignInPage extends StatelessWidget {
           SocialButton(
             size: size,
             text: 'Go anonymous',
-            onPressed: _signInAnonymously,
+            onPressed: () => _signInAnonymously(auth),
             buttonColor: Colors.lime.shade300,
             icon: Icon(FontAwesomeIcons.glasses),
           ),

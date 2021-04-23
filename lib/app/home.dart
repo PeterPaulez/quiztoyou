@@ -1,16 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:quiztoyou/common_widgets/dialog.dart';
 import 'package:quiztoyou/models/character.dart';
 import 'package:quiztoyou/services/auth.dart';
 import 'package:quiztoyou/services/card_swiper.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key, required this.auth}) : super(key: key);
-  final AuthBase auth;
-
-  void _signOut() async {
+  void _signOut(BuildContext context) async {
     try {
+      final auth = Provider.of<AuthBase>(context, listen: false);
       await auth.signOut();
       print('LogOUT');
     } catch (e) {
@@ -29,7 +28,7 @@ class HomePage extends StatelessWidget {
     print('Hello: $didRequestSignOut');
     if (didRequestSignOut == true) {
       print('Hello');
-      _signOut();
+      _signOut(context);
     }
   }
 

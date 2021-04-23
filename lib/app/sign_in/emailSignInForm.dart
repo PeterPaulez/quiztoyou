@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:quiztoyou/app/sign_in/formButton.dart';
 import 'package:quiztoyou/app/sign_in/validators.dart';
 import 'package:quiztoyou/common_widgets/dialog.dart';
@@ -8,8 +9,6 @@ import 'package:quiztoyou/services/auth.dart';
 enum EmailFormType { signIn, register }
 
 class EmailSignInForm extends StatefulWidget with EmailAnPasswordValidators {
-  EmailSignInForm({required this.auth});
-  final AuthBase auth;
   @override
   _EmailSignInFormState createState() => _EmailSignInFormState();
 }
@@ -38,6 +37,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   }
 
   Future<void> _submit() async {
+    final auth = Provider.of<AuthBase>(context, listen: false);
     setState(() {
       _submittedForm = true;
       // With the Dialog is not need but its a good idea to block and disabled everything in
@@ -49,9 +49,9 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
     try {
       //await Future.delayed(Duration(seconds: 2)); // Test Dialog
       if (_formType == EmailFormType.signIn) {
-        await widget.auth.signInEmail(_email, _password);
+        await auth.signInEmail(_email, _password);
       } else {
-        await widget.auth.createUserWithEmail(_email, _password);
+        await auth.createUserWithEmail(_email, _password);
       }
       ProgressDialog.dissmiss(context);
       Navigator.of(context).pop();
