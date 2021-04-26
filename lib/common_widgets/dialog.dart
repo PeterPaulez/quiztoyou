@@ -1,7 +1,8 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-abstract class TextDialog {
+class TextDialog {
   static alert(
     BuildContext context, {
     required String title,
@@ -31,7 +32,27 @@ abstract class TextDialog {
   }
 }
 
-abstract class ProgressDialog {
+class ShowExceptionDialog {
+  static alert({
+    required BuildContext context,
+    required String title,
+    required Exception exception,
+  }) =>
+      TextDialog.alert(
+        context,
+        title: title,
+        content: _message(exception),
+        textOK: 'OK',
+      );
+  static String _message(Exception exception) {
+    if (exception is FirebaseException) {
+      return '\n' + exception.message!;
+    }
+    return '\n' + exception.toString();
+  }
+}
+
+class ProgressDialog {
   static show(BuildContext context) {
     showCupertinoDialog(
       context: context,

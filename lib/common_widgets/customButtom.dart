@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class CustomButtom extends StatelessWidget {
   final Color buttonColor;
+  final Color disabledColor;
   final double borderRadius;
   final VoidCallback? onPressed;
   final Widget child;
@@ -12,6 +13,7 @@ class CustomButtom extends StatelessWidget {
     this.borderRadius: 6.0,
     this.elevation: 5,
     this.height: 48,
+    this.disabledColor: Colors.grey,
     required this.onPressed,
     required this.child,
   });
@@ -28,7 +30,7 @@ class CustomButtom extends StatelessWidget {
       onPressed: this.onPressed,
       child: this.child,
       color: this.buttonColor,
-      disabledColor: Colors.grey,
+      disabledColor: this.disabledColor,
     );
   }
 }

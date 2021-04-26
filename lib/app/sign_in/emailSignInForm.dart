@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +24,15 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   String get _password => _passController.text;
   bool _submittedForm = false;
   bool _isLoading = false;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passController.dispose();
+    _emailFocusNode.dispose();
+    _passFocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,13 +65,12 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       }
       ProgressDialog.dissmiss(context);
       Navigator.of(context).pop();
-    } catch (err) {
+    } on FirebaseAuthException catch (err) {
       ProgressDialog.dissmiss(context);
-      TextDialog.alert(
-        context,
-        title: 'Form submit Failed',
-        content: err.toString(),
-        textOK: 'Ok',
+      ShowExceptionDialog.alert(
+        context: context,
+        title: 'Form submitted Failed',
+        exception: err,
       );
       print('Error ${err.toString()}');
     } finally {

@@ -4,14 +4,16 @@ import 'package:quiztoyou/common_widgets/customButtom.dart';
 class SocialButton extends CustomButtom {
   SocialButton({
     Color buttonColor: Colors.white,
+    Color disabledColor: Colors.white,
     Color textColor: Colors.black87,
     double textSize: 15.0,
     required String text,
     required Icon icon,
-    required VoidCallback onPressed,
+    VoidCallback? onPressed,
     required Size size,
   }) : super(
           buttonColor: buttonColor,
+          disabledColor: disabledColor,
           onPressed: onPressed,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
