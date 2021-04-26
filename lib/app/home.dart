@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quiztoyou/common_widgets/dialog.dart';
 import 'package:quiztoyou/models/character.dart';
+import 'package:quiztoyou/services/albumFlow/flow.dart';
 import 'package:quiztoyou/services/auth.dart';
-import 'package:quiztoyou/services/card_swiper.dart';
+import 'package:quiztoyou/services/cardSwiper/card_swiper.dart';
 
 class HomePage extends StatelessWidget {
   void _signOut(BuildContext context) async {
@@ -30,14 +31,6 @@ class HomePage extends StatelessWidget {
       print('Hello');
       _signOut(context);
     }
-  }
-
-  List<Widget> render(BuildContext context, List children) {
-    return ListTile.divideTiles(
-        context: context,
-        tiles: children.map((dynamic data) {
-          return buildListTile(context, data[0], data[1], data[2]);
-        })).toList();
   }
 
   Widget buildListTile(
@@ -84,52 +77,56 @@ class HomePage extends StatelessWidget {
         ),
       ),
       body: Center(
-        child: Container(
-            width: double.infinity,
-            child: Container(
-              padding: EdgeInsets.all(2),
-              //color: Colors.black,
-              child: Swiper(
-                layout: SwiperLayout.STACK,
-                itemWidth: 300,
-                itemHeight: 700,
-                index: 0,
-                itemBuilder: (BuildContext context, int index) {
-                  final Character character = characters[index];
-                  return ClipRRect(
-                    borderRadius: BorderRadius.circular(25),
-                    child: Container(
-                      color: Color(character.color),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(5, 30, 5, 10),
-                            child: Text(
-                              '${index + 1}. ${character.title}',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            child: Image.asset(character.avatar),
-                            height: 500,
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-                //autoplay: true,
-                itemCount: characters.length,
-                //scrollDirection: Axis.vertical,
-                //pagination: SwiperPagination(alignment: Alignment.centerRight),
-                //control: SwiperControl(),
-              ),
-            )),
+        child: AlbumFlowPage(),
       ),
     );
+  }
+
+  Container cardsView() {
+    return Container(
+        width: double.infinity,
+        child: Container(
+          padding: EdgeInsets.all(2),
+          //color: Colors.black,
+          child: Swiper(
+            layout: SwiperLayout.STACK,
+            itemWidth: 300,
+            itemHeight: 700,
+            index: 0,
+            itemBuilder: (BuildContext context, int index) {
+              final Character character = characters[index];
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(25),
+                child: Container(
+                  color: Color(character.color),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(5, 30, 5, 10),
+                        child: Text(
+                          '${index + 1}. ${character.title}',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        child: Image.asset(character.avatar),
+                        height: 500,
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+            //autoplay: true,
+            itemCount: characters.length,
+            //scrollDirection: Axis.vertical,
+            //pagination: SwiperPagination(alignment: Alignment.centerRight),
+            //control: SwiperControl(),
+          ),
+        ));
   }
 }
