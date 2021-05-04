@@ -15,8 +15,9 @@ class SignInPage extends StatelessWidget {
 
   // Widget require BLOC
   static Widget create(BuildContext context) {
+    final auth = Provider.of<AuthBase>(context, listen: false);
     return Provider<SignInBloc>(
-      create: (_) => SignInBloc(),
+      create: (_) => SignInBloc(auth: auth),
       // GLUE holds an provider and widget together
       child: Consumer<SignInBloc>(
         builder: (_, bloc, __) => SignInPage(bloc: bloc),
@@ -47,7 +48,6 @@ class SignInPage extends StatelessWidget {
   }
 
   void _showSignInError(BuildContext context, Exception exception) {
-    _signInFinish(context);
     if (exception is FirebaseAuthException &&
         exception.code == 'ERROR_ABORTED_BY_USER') {
       return;
@@ -59,38 +59,27 @@ class SignInPage extends StatelessWidget {
     );
   }
 
-  void _signInStarts(BuildContext context) {
-    bloc.setIsLoading(true);
-  }
-
-  void _signInFinish(BuildContext context) {
-    bloc.setIsLoading(false);
-  }
-
-  void _signInAnonymously(BuildContext context, AuthBase auth) async {
-    _signInStarts(context);
+  void _signInAnonymously(BuildContext context) async {
     try {
-      await auth.signInAnonymously();
+      await bloc.signInAnonymously();
       print('LogIn');
     } on Exception catch (exception) {
       _showSignInError(context, exception);
     }
   }
 
-  void _signInGoogle(BuildContext context, AuthBase auth) async {
-    _signInStarts(context);
+  void _signInGoogle(BuildContext context) async {
     try {
-      await auth.signInGoogle();
+      await bloc.signInGoogle();
       print('LogIn');
     } on Exception catch (exception) {
       _showSignInError(context, exception);
     }
   }
 
-  void _signInFacebook(BuildContext context, AuthBase auth) async {
-    _signInStarts(context);
+  void _signInFacebook(BuildContext context) async {
     try {
-      await auth.signInFacebook();
+      await bloc.signInFacebook();
       print('LogIn');
     } on Exception catch (exception) {
       _showSignInError(context, exception);
@@ -122,7 +111,7 @@ class SignInPage extends StatelessWidget {
           SocialButton(
             size: size,
             text: 'Sign in with Google',
-            onPressed: isLoading ? null : () => _signInGoogle(context, auth),
+            onPressed: isLoading ? null : () => _signInGoogle(context),
             icon: Icon(FontAwesomeIcons.google),
           ),
           SizedBox(height: 8),
@@ -145,7 +134,7 @@ class SignInPage extends StatelessWidget {
             textColor: Colors.white,
             buttonColor: Color(0xFF333D92),
             disabledColor: Color(0xFF333D92),
-            onPressed: isLoading ? null : () => _signInFacebook(context, auth),
+            onPressed: isLoading ? null : () => _signInFacebook(context),
             icon: Icon(
               FontAwesomeIcons.facebook,
               color: Colors.white,
@@ -174,8 +163,7 @@ class SignInPage extends StatelessWidget {
           SocialButton(
             size: size,
             text: 'Go anonymous',
-            onPressed:
-                isLoading ? null : () => _signInAnonymously(context, auth),
+            onPressed: isLoading ? null : () => _signInAnonymously(context),
             buttonColor: Colors.lime.shade300,
             disabledColor: Colors.lime.shade300,
             icon: Icon(FontAwesomeIcons.glasses),
