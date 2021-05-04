@@ -108,7 +108,6 @@ class SignInPage extends StatelessWidget {
 
   Widget _builContent(Size size, BuildContext context, bool isLoading) {
     final auth = Provider.of<AuthBase>(context, listen: false);
-    final bloc = Provider.of<SignInBloc>(context, listen: false);
     return Padding(
       padding: EdgeInsets.all(16),
       child: Column(

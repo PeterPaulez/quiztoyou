@@ -1,16 +1,18 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+//import 'package:cached_network_image/cached_network_image.dart';
 import 'package:vector_math/vector_math.dart' as vector;
 
 class AlbumImage extends StatelessWidget {
   final String image;
   final double angle;
+  final int index;
 
   const AlbumImage({
     Key? key,
     required this.image,
     required this.angle,
+    required this.index,
   }) : super(key: key);
 
   @override
@@ -55,12 +57,33 @@ class AlbumImage extends StatelessWidget {
           borderRadius: BorderRadius.circular(15.0),
         ),
         elevation: 10,
+        child: Container(
+          color: Colors.red,
+          child: Column(
+            children: [
+              Container(
+                alignment: Alignment.center,
+                color: Colors.white,
+                height: 50,
+                child: Text('Título ' + this.index.toString()),
+              ),
+              Expanded(child: Text('Hola chica')),
+              Expanded(child: Text('Hola chica')),
+              Expanded(child: Text('Hola chica')),
+              Expanded(child: Text('Hola chica')),
+              Expanded(child: Text('Hola chica')),
+              Expanded(child: Text('Hola chica')),
+            ],
+          ),
+        ),
+        /*
         child: CachedNetworkImage(
           imageUrl: image,
           fit: BoxFit.cover,
           placeholder: (context, url) =>
               Center(child: CircularProgressIndicator()),
         ),
+        */
       ),
     );
   }

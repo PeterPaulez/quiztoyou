@@ -44,8 +44,12 @@ class _AlbumFlowPageState extends State<AlbumFlowPage> {
     return result;
   }
 
-  void _onTapAlbum(String image, double angle) {
-    final page = AlbumFlowDetailPage(image: image, angle: angle);
+  void _onTapAlbum(String image, double angle, int index) {
+    final page = AlbumFlowDetailPage(
+      image: image,
+      angle: angle,
+      index: index,
+    );
     Navigator.of(context).push(
       PageRouteBuilder<Null>(
         pageBuilder: (BuildContext context, Animation<double> animation,
@@ -81,11 +85,6 @@ class _AlbumFlowPageState extends State<AlbumFlowPage> {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            Positioned(
-              top: 300,
-              right: 200,
-              child: Container(color: Colors.red, child: Text('Hola')),
-            ),
             FutureBuilder<List<Album>>(
                 future: _loadData(),
                 builder: (context, snapshot) {
@@ -117,9 +116,13 @@ class _AlbumFlowPageState extends State<AlbumFlowPage> {
                                       alignment: Alignment.center,
                                       child: InkWell(
                                         onTap: () {
-                                          _onTapAlbum(
-                                              snapshot.data![index].image,
-                                              rotationY);
+                                          // Avoiding error in RENDER
+                                          if (t < 15) {
+                                            _onTapAlbum(
+                                                snapshot.data![index].image,
+                                                rotationY,
+                                                index);
+                                          }
                                         },
                                         child: SizedBox(
                                           height: itemHeight,
@@ -131,6 +134,7 @@ class _AlbumFlowPageState extends State<AlbumFlowPage> {
                                                   image: snapshot
                                                       .data![index].image,
                                                   angle: rotationY,
+                                                  index: index,
                                                 ),
                                               ),
                                               Align(
@@ -168,9 +172,9 @@ class _AlbumFlowPageState extends State<AlbumFlowPage> {
             Positioned(
               bottom: 0,
               child: Container(
-                  color: Colors.red,
+                  color: Colors.pinkAccent,
                   width: MediaQuery.of(context).size.width,
-                  height: 160,
+                  height: 170,
                   child: Text(
                     'Days of the calendar',
                     textAlign: TextAlign.center,
