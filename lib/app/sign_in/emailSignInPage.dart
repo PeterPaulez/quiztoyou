@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quiztoyou/app/sign_in/emailSignInForm.dart';
+import 'package:quiztoyou/app/sign_in/emailSigInFormBloc.dart';
 
 class EmailSignInPage extends StatelessWidget {
   @override
@@ -14,7 +14,7 @@ class EmailSignInPage extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.all(16.0),
           child: Card(
-            child: EmailSignInForm(),
+            child: EmailSignInFormBloc.create(context),
           ),
         ),
       ),

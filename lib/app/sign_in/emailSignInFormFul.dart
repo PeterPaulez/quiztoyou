@@ -2,19 +2,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:quiztoyou/app/sign_in/emailSignInModel.dart';
 import 'package:quiztoyou/app/sign_in/formButton.dart';
 import 'package:quiztoyou/app/sign_in/validators.dart';
 import 'package:quiztoyou/common_widgets/dialog.dart';
 import 'package:quiztoyou/services/auth.dart';
 
-enum EmailFormType { signIn, register }
-
-class EmailSignInForm extends StatefulWidget with EmailAnPasswordValidators {
+class EmailSignInFormFul extends StatefulWidget with EmailAnPasswordValidators {
   @override
-  _EmailSignInFormState createState() => _EmailSignInFormState();
+  _EmailSignInFormFulState createState() => _EmailSignInFormFulState();
 }
 
-class _EmailSignInFormState extends State<EmailSignInForm> {
+class _EmailSignInFormFulState extends State<EmailSignInFormFul> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
   final FocusNode _emailFocusNode = FocusNode();

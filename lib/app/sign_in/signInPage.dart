@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:quiztoyou/app/sign_in/emailSignIn.dart';
+import 'package:quiztoyou/app/sign_in/emailSignInPage.dart';
 import 'package:quiztoyou/app/sign_in/signInBloc.dart';
 import 'package:quiztoyou/app/sign_in/socialButton.dart';
 import 'package:quiztoyou/common_widgets/dialog.dart';
