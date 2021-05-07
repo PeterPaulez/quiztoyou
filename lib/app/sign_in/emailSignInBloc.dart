@@ -18,27 +18,13 @@ class EmailSignInBloc {
 
   Future<void> submit() async {
     updateWith(submittedForm: true, isLoading: true);
-    print('Email: ${_model.email} :: Pass: ${_model.password}');
-    //ProgressDialog.show(context);
     try {
-      //await Future.delayed(Duration(seconds: 2)); // Test Dialog
       if (_model.formType == EmailFormType.signIn) {
         await auth.signInEmail(_model.email, _model.password);
       } else {
         await auth.createUserWithEmail(_model.email, _model.password);
       }
-      //ProgressDialog.dissmiss(context);
-      //Navigator.of(context).pop();
     } catch (err) {
-      /*
-      ProgressDialog.dissmiss(context);
-      ShowExceptionDialog.alert(
-        context: context,
-        title: 'Form submitted Failed',
-        exception: err,
-      );
-      */
-      print('Error ${err.toString()}');
       updateWith(isLoading: false);
       rethrow;
     }
