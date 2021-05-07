@@ -3,26 +3,33 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:quiztoyou/app/sign_in/emailSignInPage.dart';
-import 'package:quiztoyou/app/sign_in/signInBloc.dart';
+import 'package:quiztoyou/app/sign_in/signInManager.dart';
 import 'package:quiztoyou/app/sign_in/socialButton.dart';
 import 'package:quiztoyou/common_widgets/dialog.dart';
 import 'package:quiztoyou/services/auth.dart';
 import 'package:transitioner/transitioner.dart';
 
 class SignInPage extends StatelessWidget {
-  final SignInBloc bloc;
-  const SignInPage({Key? key, required this.bloc}) : super(key: key);
+  final SignInManager manager;
+  final bool isLoading;
+  const SignInPage({Key? key, required this.manager, required this.isLoading})
+      : super(key: key);
 
-  // Widget require BLOC
+  // Widget require MANAGER
   static Widget create(BuildContext context) {
     final auth = Provider.of<AuthBase>(context, listen: false);
-    return Provider<SignInBloc>(
-      create: (_) => SignInBloc(auth: auth),
-      // GLUE holds an provider and widget together
-      child: Consumer<SignInBloc>(
-        builder: (_, bloc, __) => SignInPage(bloc: bloc),
+    return ChangeNotifierProvider<ValueNotifier<bool>>(
+      create: (_) => ValueNotifier<bool>(false),
+      child: Consumer<ValueNotifier<bool>>(
+        builder: (_, isLoading, __) => Provider<SignInManager>(
+          create: (_) => SignInManager(auth: auth, isLoading: isLoading),
+          // GLUE holds an provider and widget together
+          child: Consumer<SignInManager>(
+            builder: (_, manager, __) =>
+                SignInPage(manager: manager, isLoading: isLoading.value),
+          ),
+        ),
       ),
-      dispose: (_, bloc) => bloc.dispose(),
     );
   }
 
@@ -36,13 +43,7 @@ class SignInPage extends StatelessWidget {
         elevation: 2.0,
       ),
       // StreamBuilder just in BODY because it would be the place what needs
-      body: StreamBuilder<bool>(
-        stream: bloc.isLoadingStream,
-        initialData: false,
-        builder: (context, snapshot) {
-          return _builContent(size, context, snapshot.data!);
-        },
-      ),
+      body: _builContent(size, context),
       backgroundColor: Colors.grey[200],
     );
   }
@@ -61,7 +62,7 @@ class SignInPage extends StatelessWidget {
 
   void _signInAnonymously(BuildContext context) async {
     try {
-      await bloc.signInAnonymously();
+      await manager.signInAnonymously();
       print('LogIn');
     } on Exception catch (exception) {
       _showSignInError(context, exception);
@@ -70,7 +71,7 @@ class SignInPage extends StatelessWidget {
 
   void _signInGoogle(BuildContext context) async {
     try {
-      await bloc.signInGoogle();
+      await manager.signInGoogle();
       print('LogIn');
     } on Exception catch (exception) {
       _showSignInError(context, exception);
@@ -79,7 +80,7 @@ class SignInPage extends StatelessWidget {
 
   void _signInFacebook(BuildContext context) async {
     try {
-      await bloc.signInFacebook();
+      await manager.signInFacebook();
       print('LogIn');
     } on Exception catch (exception) {
       _showSignInError(context, exception);
@@ -95,7 +96,7 @@ class SignInPage extends StatelessWidget {
     );
   }
 
-  Widget _builContent(Size size, BuildContext context, bool isLoading) {
+  Widget _builContent(Size size, BuildContext context) {
     final auth = Provider.of<AuthBase>(context, listen: false);
     return Padding(
       padding: EdgeInsets.all(16),
@@ -105,13 +106,13 @@ class SignInPage extends StatelessWidget {
         children: <Widget>[
           SizedBox(
             height: 40,
-            child: _buildHeaderText(isLoading),
+            child: _buildHeaderText(),
           ),
           SizedBox(height: 48),
           SocialButton(
             size: size,
             text: 'Sign in with Google',
-            onPressed: isLoading ? null : () => _signInGoogle(context),
+            onPressed: this.isLoading ? null : () => _signInGoogle(context),
             icon: Icon(FontAwesomeIcons.google),
           ),
           SizedBox(height: 8),
@@ -121,7 +122,7 @@ class SignInPage extends StatelessWidget {
             textColor: Colors.white,
             buttonColor: Colors.black87,
             disabledColor: Colors.black87,
-            onPressed: isLoading ? null : () {},
+            onPressed: this.isLoading ? null : () {},
             icon: Icon(
               FontAwesomeIcons.apple,
               color: Colors.white,
@@ -134,7 +135,7 @@ class SignInPage extends StatelessWidget {
             textColor: Colors.white,
             buttonColor: Color(0xFF333D92),
             disabledColor: Color(0xFF333D92),
-            onPressed: isLoading ? null : () => _signInFacebook(context),
+            onPressed: this.isLoading ? null : () => _signInFacebook(context),
             icon: Icon(
               FontAwesomeIcons.facebook,
               color: Colors.white,
@@ -145,7 +146,8 @@ class SignInPage extends StatelessWidget {
             size: size,
             text: 'Sign in with Email',
             textColor: Colors.white,
-            onPressed: isLoading ? null : () => _signInWithEmail(context, auth),
+            onPressed:
+                this.isLoading ? null : () => _signInWithEmail(context, auth),
             buttonColor: Colors.teal.shade700,
             disabledColor: Colors.teal.shade700,
             icon: Icon(
@@ -163,7 +165,8 @@ class SignInPage extends StatelessWidget {
           SocialButton(
             size: size,
             text: 'Go anonymous',
-            onPressed: isLoading ? null : () => _signInAnonymously(context),
+            onPressed:
+                this.isLoading ? null : () => _signInAnonymously(context),
             buttonColor: Colors.lime.shade300,
             disabledColor: Colors.lime.shade300,
             icon: Icon(FontAwesomeIcons.glasses),
@@ -173,8 +176,8 @@ class SignInPage extends StatelessWidget {
     );
   }
 
-  Widget _buildHeaderText(bool isLoading) {
-    if (isLoading) {
+  Widget _buildHeaderText() {
+    if (this.isLoading) {
       return Center(child: CircularProgressIndicator());
     }
     return Text(

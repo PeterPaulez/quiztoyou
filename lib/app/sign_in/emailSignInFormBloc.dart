@@ -115,7 +115,7 @@ class _EmailSignInFormBlocState extends State<EmailSignInFormBloc> {
         ),
         obscureText: true,
         textInputAction: TextInputAction.done,
-        onChanged: (value) => widget.bloc.updateEmail(value),
+        onChanged: (value) => widget.bloc.updatePassword(value),
       ),
       SizedBox(
         height: 24,
