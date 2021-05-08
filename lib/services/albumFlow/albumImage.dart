@@ -59,21 +59,25 @@ class AlbumImage extends StatelessWidget {
         elevation: 10,
         child: Container(
           color: Colors.red,
-          child: Column(
-            children: [
-              Container(
-                alignment: Alignment.center,
-                color: Colors.white,
-                height: 50,
-                child: Text('Título ' + this.index.toString()),
-              ),
-              Expanded(child: Text('Hola chica')),
-              Expanded(child: Text('Hola chica')),
-              Expanded(child: Text('Hola chica')),
-              Expanded(child: Text('Hola chica')),
-              Expanded(child: Text('Hola chica')),
-              Expanded(child: Text('Hola chica')),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  color: Colors.white,
+                  height: 50,
+                  child: Text('Título ' + this.index.toString()),
+                ),
+                Text('Hola chica'),
+                Text('Hola chica'),
+                Text('Hola chica'),
+                Text('Hola chica'),
+                Text('Hola chica'),
+                Text('Hola chica'),
+                Text('Hola chica'),
+                Text('Hola chica'),
+              ],
+            ),
           ),
         ),
         /*

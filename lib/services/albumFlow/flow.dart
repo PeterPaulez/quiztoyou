@@ -116,13 +116,10 @@ class _AlbumFlowPageState extends State<AlbumFlowPage> {
                                       alignment: Alignment.center,
                                       child: InkWell(
                                         onTap: () {
-                                          // Avoiding error in RENDER
-                                          if (t < 15) {
-                                            _onTapAlbum(
-                                                snapshot.data![index].image,
-                                                rotationY,
-                                                index);
-                                          }
+                                          _onTapAlbum(
+                                              snapshot.data![index].image,
+                                              rotationY,
+                                              index);
                                         },
                                         child: SizedBox(
                                           height: itemHeight,
