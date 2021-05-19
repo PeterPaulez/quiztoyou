@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:apple_sign_in_safety/apple_sign_in.dart';
 
 abstract class AuthBase {
   // Implemented by AuthFireBase, doesn't need any sync option
@@ -11,6 +13,7 @@ abstract class AuthBase {
   Stream<User?> authStateChanges();
   Future<User?> signInGoogle();
   Future<User?> signInFacebook();
+  Future<User?> signInApple();
   Future<void> signOut();
 }
 
@@ -99,6 +102,46 @@ class AuthFireBase implements AuthBase {
         throw FirebaseAuthException(
           code: 'ERROR_FACEBOOK_LOGIN_FAILED',
           message: response.error?.developerMessage,
+        );
+    }
+  }
+
+  @override
+  Future<User?> signInApple({List<Scope> scopes = const []}) async {
+    scopes = [Scope.email, Scope.fullName];
+    final AuthorizationResult result = await AppleSignIn.performRequests(
+        [AppleIdRequest(requestedScopes: scopes)]);
+    switch (result.status) {
+      case AuthorizationStatus.authorized:
+        final appleIdCredential = result.credential!;
+        final oAuthProvider = OAuthProvider('apple.com');
+        final idToken = String.fromCharCodes(appleIdCredential.identityToken!);
+        final accessToken =
+            String.fromCharCodes(appleIdCredential.authorizationCode!);
+        final credential = oAuthProvider.credential(
+          idToken: idToken,
+          accessToken: accessToken,
+        );
+
+        final authResult = await _firebaseAuth.signInWithCredential(credential);
+        print(authResult);
+        final firebaseUser = authResult.user;
+        if (scopes.contains(Scope.fullName)) {
+          final String displayName =
+              '${appleIdCredential.fullName!.givenName} ${appleIdCredential.fullName!.familyName}';
+          print(displayName);
+          //await firebaseUser.updateProfile(displayName: displayName);
+        }
+        return firebaseUser!;
+      case AuthorizationStatus.error:
+        throw PlatformException(
+          code: 'ERROR_AUTHORIZATION_DENIED',
+          message: result.error.toString(),
+        );
+      case AuthorizationStatus.cancelled:
+        throw PlatformException(
+          code: 'ERROR_ABORTED_BY_USER',
+          message: 'Sign in aborted by user',
         );
     }
   }

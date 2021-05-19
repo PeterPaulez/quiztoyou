@@ -78,6 +78,15 @@ class SignInPage extends StatelessWidget {
     }
   }
 
+  void _signInApple(BuildContext context) async {
+    try {
+      await manager.signInApple();
+      print('LogIn');
+    } on Exception catch (exception) {
+      _showSignInError(context, exception);
+    }
+  }
+
   void _signInFacebook(BuildContext context) async {
     try {
       await manager.signInFacebook();
@@ -122,7 +131,7 @@ class SignInPage extends StatelessWidget {
             textColor: Colors.white,
             buttonColor: Colors.black87,
             disabledColor: Colors.black87,
-            onPressed: this.isLoading ? null : () {},
+            onPressed: this.isLoading ? null : () => _signInApple(context),
             icon: Icon(
               FontAwesomeIcons.apple,
               color: Colors.white,

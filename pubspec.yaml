@@ -38,6 +38,7 @@ dependencies:
   transitioner: ^0.1.0
   provider: ^5.0.0
   cached_network_image: ^3.0.0
+  apple_sign_in_safety: ^0.0.6
 
 flutter_icons:
   android: "launcher_icon"
