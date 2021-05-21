@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:quiztoyou/app/home.dart';
+import 'package:quiztoyou/app/home/jobs_page.dart';
 import 'package:quiztoyou/app/sign_in/signInPage.dart';
 import 'package:quiztoyou/services/auth.dart';
 
@@ -19,7 +19,7 @@ class LandingPage extends StatelessWidget {
           }
 
           // Signed USER
-          return HomePage();
+          return JobsPage();
         }
 
         // While retrieving DATA
