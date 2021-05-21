@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:quiztoyou/app/home/jobs_page.dart';
 import 'package:quiztoyou/app/sign_in/signInPage.dart';
 import 'package:quiztoyou/services/auth.dart';
+import 'package:quiztoyou/services/database.dart';
 
 class LandingPage extends StatelessWidget {
   @override
@@ -19,7 +20,10 @@ class LandingPage extends StatelessWidget {
           }
 
           // Signed USER
-          return JobsPage();
+          return Provider<Database>(
+            create: (_) => FirestoreDatabase(uid: user.uid),
+            child: JobsPage(),
+          );
         }
 
         // While retrieving DATA

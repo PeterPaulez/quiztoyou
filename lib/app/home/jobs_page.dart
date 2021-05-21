@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quiztoyou/app/home/models/job.dart';
 import 'package:quiztoyou/common_widgets/dialog.dart';
 import 'package:quiztoyou/services/auth.dart';
+import 'package:quiztoyou/services/database.dart';
 
 class JobsPage extends StatelessWidget {
   void _signOut(BuildContext context) async {
@@ -56,6 +58,19 @@ class JobsPage extends StatelessWidget {
       body: Center(
         child: Text('Jobs Page'),
       ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () => _createJob(context),
+        elevation: 0,
+      ),
     );
+  }
+
+  void _createJob(BuildContext context) {
+    final database = Provider.of<Database>(context, listen: false);
+    database.createJob(Job(
+      name: 'Developing',
+      ratePerHour: 10,
+    ));
   }
 }
