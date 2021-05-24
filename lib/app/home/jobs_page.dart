@@ -66,11 +66,20 @@ class JobsPage extends StatelessWidget {
     );
   }
 
-  void _createJob(BuildContext context) {
-    final database = Provider.of<Database>(context, listen: false);
-    database.createJob(Job(
-      name: 'Developing',
-      ratePerHour: 10,
-    ));
+  Future<void> _createJob(BuildContext context) async {
+    try {
+      final database = Provider.of<Database>(context, listen: false);
+      await database.createJob(Job(name: 'Developing', ratePerHour: 10));
+    } on FirebaseException catch (e) {
+      ShowExceptionDialog.alert(
+          context: context, title: 'Operation failed', exception: e);
+    } catch (e) {
+      TextDialog.alert(
+        context,
+        title: 'Operation Failed',
+        content: e.toString(),
+        textOK: 'Try again!',
+      );
+    }
   }
 }
