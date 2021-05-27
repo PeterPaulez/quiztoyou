@@ -16,8 +16,22 @@ class FirestoreDatabase implements Database {
         data: job.toMap(),
       );
 
-  Stream<List<Job>?> jobsStream() {
-    final path = ApiPath.jobs(uid);
+  Stream<List<Job>?> jobsStream() => _collectionStream(
+        builder: (data) => Job.fromMap(data),
+        path: ApiPath.jobs(uid),
+      );
+
+  Future<void> _setData(
+      {required String path, required Map<String, dynamic> data}) async {
+    final reference = FirebaseFirestore.instance.doc(path);
+    print('$path: $data');
+    await reference.set(data);
+  }
+
+  Stream<List<T>> _collectionStream<T>({
+    required String path,
+    required T Function(Map<String, dynamic> data) builder,
+  }) {
     final reference = FirebaseFirestore.instance.collection(path);
     final snapshots = reference.snapshots();
     snapshots.listen((snapshot) {
@@ -29,26 +43,9 @@ class FirestoreDatabase implements Database {
     });
 
     return snapshots.map((snapshot) => snapshot.docs
-        .map(
-          (snapshot) => Job.fromMap(snapshot.data()),
-          /*
-          {
-            final data = snapshot.data();
-            return Job(
-              name: data['name'],
-              ratePerHour: data['ratePerHour'],
-            );
-          }
-          ,
-          */
-        )
+        .map((snapshot) => builder(
+              snapshot.data(),
+            ))
         .toList());
-  }
-
-  Future<void> _setData(
-      {required String path, required Map<String, dynamic> data}) async {
-    final reference = FirebaseFirestore.instance.doc(path);
-    print('$path: $data');
-    await reference.set(data);
   }
 }
