@@ -28,15 +28,21 @@ class FirestoreDatabase implements Database {
       });
     });
 
-    return snapshots.map((snapshot) => snapshot.docs.map(
-          (snapshot) {
+    return snapshots.map((snapshot) => snapshot.docs
+        .map(
+          (snapshot) => Job.fromMap(snapshot.data()),
+          /*
+          {
             final data = snapshot.data();
             return Job(
               name: data['name'],
               ratePerHour: data['ratePerHour'],
             );
-          },
-        ).toList());
+          }
+          ,
+          */
+        )
+        .toList());
   }
 
   Future<void> _setData(
