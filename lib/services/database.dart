@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quiztoyou/app/home/models/job.dart';
 import 'package:quiztoyou/services/api_path.dart';
+import 'package:quiztoyou/services/firestore.dart';
 
 abstract class Database {
   Future<void> createJob(Job job);
@@ -10,42 +10,15 @@ abstract class Database {
 class FirestoreDatabase implements Database {
   final String uid;
   FirestoreDatabase({required this.uid});
+  final _sevice = FirestoreService.instance;
 
-  Future<void> createJob(Job job) => _setData(
+  Future<void> createJob(Job job) => _sevice.setData(
         path: ApiPath.job(uid, 'job_abc'),
         data: job.toMap(),
       );
 
-  Stream<List<Job>?> jobsStream() => _collectionStream(
+  Stream<List<Job>?> jobsStream() => _sevice.collectionStream(
         builder: (data) => Job.fromMap(data),
         path: ApiPath.jobs(uid),
       );
-
-  Future<void> _setData(
-      {required String path, required Map<String, dynamic> data}) async {
-    final reference = FirebaseFirestore.instance.doc(path);
-    print('$path: $data');
-    await reference.set(data);
-  }
-
-  Stream<List<T>> _collectionStream<T>({
-    required String path,
-    required T Function(Map<String, dynamic> data) builder,
-  }) {
-    final reference = FirebaseFirestore.instance.collection(path);
-    final snapshots = reference.snapshots();
-    snapshots.listen((snapshot) {
-      int contador = 0;
-      snapshot.docs.forEach((element) {
-        contador = contador + 1;
-        print('Data $contador: ${element.data()}');
-      });
-    });
-
-    return snapshots.map((snapshot) => snapshot.docs
-        .map((snapshot) => builder(
-              snapshot.data(),
-            ))
-        .toList());
-  }
 }
