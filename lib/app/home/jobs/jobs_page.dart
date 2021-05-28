@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quiztoyou/app/home/jobs/new_job_page.dart';
 import 'package:quiztoyou/app/home/models/job.dart';
 import 'package:quiztoyou/common_widgets/dialog.dart';
 import 'package:quiztoyou/services/auth.dart';
@@ -58,27 +59,11 @@ class JobsPage extends StatelessWidget {
       body: _buildContents(context),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => _createJob(context),
+        //onPressed: () => _createJob(context),
+        onPressed: () => NewJobPage.show(context),
         elevation: 0,
       ),
     );
-  }
-
-  Future<void> _createJob(BuildContext context) async {
-    try {
-      final database = Provider.of<Database>(context, listen: false);
-      await database.createJob(Job(name: 'Developing', ratePerHour: 10));
-    } on FirebaseException catch (e) {
-      ShowExceptionDialog.alert(
-          context: context, title: 'Operation failed', exception: e);
-    } catch (e) {
-      TextDialog.alert(
-        context,
-        title: 'Operation Failed',
-        content: e.toString(),
-        textOK: 'Try again!',
-      );
-    }
   }
 
   _buildContents(BuildContext context) {
@@ -100,4 +85,23 @@ class JobsPage extends StatelessWidget {
       },
     );
   }
+
+  /*
+  Future<void> _createJob(BuildContext context) async {
+    try {
+      final database = Provider.of<Database>(context, listen: false);
+      await database.createJob(Job(name: 'Developing', ratePerHour: 10));
+    } on FirebaseException catch (e) {
+      ShowExceptionDialog.alert(
+          context: context, title: 'Operation failed', exception: e);
+    } catch (e) {
+      TextDialog.alert(
+        context,
+        title: 'Operation Failed',
+        content: e.toString(),
+        textOK: 'Try again!',
+      );
+    }
+  }
+  */
 }
