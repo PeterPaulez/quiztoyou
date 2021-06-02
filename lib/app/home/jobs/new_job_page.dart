@@ -1,6 +1,8 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quiztoyou/app/home/models/job.dart';
+import 'package:quiztoyou/common_widgets/dialog.dart';
 import 'package:quiztoyou/services/database.dart';
 
 class NewJobPage extends StatefulWidget {
@@ -42,9 +44,33 @@ class _NewJobPageState extends State<NewJobPage> {
       print('Form Saved');
       print('Name: $_name');
       print('Rate: $_ratePerHour');
-      final job = Job(name: _name!, ratePerHour: _ratePerHour!);
-      await widget.database.createJob(job);
-      Navigator.of(context).pop();
+      ProgressDialog.show(context);
+      try {
+        /// Testing repeated Job firstable
+        /// .first is very important to have the newest version of the data IMPORTANT
+        final jobs = await widget.database.jobsStream().first;
+        final allNames = jobs!.map((job) => job.name).toList();
+        if (allNames.contains(_name)) {
+          ProgressDialog.dissmiss(context);
+          TextDialog.alert(
+            context,
+            title: 'Name already used',
+            content: 'Please choose a different name',
+            textOK: 'Ok',
+          );
+        } else {
+          final job = Job(name: _name!, ratePerHour: _ratePerHour!);
+          await widget.database.createJob(job);
+          Navigator.of(context).pop();
+        }
+      } on FirebaseException catch (err) {
+        ProgressDialog.dissmiss(context);
+        ShowExceptionDialog.alert(
+          context: context,
+          title: 'Form submitted Failed',
+          exception: err,
+        );
+      }
 
       /// It is not working because new_jobs_page is not a child of provider database
       /// So the best solution is pass the database to the constructor of new_jobs_page
