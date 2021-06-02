@@ -59,6 +59,7 @@ class _NewJobPageState extends State<NewJobPage> {
             textOK: 'Ok',
           );
         } else {
+          ProgressDialog.dissmiss(context);
           final job = Job(name: _name!, ratePerHour: _ratePerHour!);
           await widget.database.createJob(job);
           Navigator.of(context).pop();
