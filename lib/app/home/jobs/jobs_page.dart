@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quiztoyou/app/home/jobs/jobs_list_tile.dart';
-import 'package:quiztoyou/app/home/jobs/new_job_page.dart';
+import 'package:quiztoyou/app/home/jobs/job_page_detail.dart';
 import 'package:quiztoyou/app/home/models/job.dart';
 import 'package:quiztoyou/common_widgets/dialog.dart';
 import 'package:quiztoyou/services/auth.dart';
@@ -61,7 +61,7 @@ class JobsPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         //onPressed: () => _createJob(context),
-        onPressed: () => NewJobPage.show(context),
+        onPressed: () => JobPageDetail.show(context),
         elevation: 0,
       ),
     );
@@ -78,7 +78,7 @@ class JobsPage extends StatelessWidget {
               .map(
                 (job) => JobsListTile(
                   job: job,
-                  onTap: () {},
+                  onTap: () => JobPageDetail.show(context, job: job),
                 ),
               )
               .toList();

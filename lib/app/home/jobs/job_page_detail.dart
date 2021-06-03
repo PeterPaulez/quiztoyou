@@ -5,30 +5,40 @@ import 'package:quiztoyou/app/home/models/job.dart';
 import 'package:quiztoyou/common_widgets/dialog.dart';
 import 'package:quiztoyou/services/database.dart';
 
-class NewJobPage extends StatefulWidget {
+class JobPageDetail extends StatefulWidget {
   final Database database;
-  NewJobPage({Key? key, required this.database}) : super(key: key);
+  final Job? job;
+  JobPageDetail({Key? key, required this.database, this.job}) : super(key: key);
 
-  static Future<void> show(BuildContext context) async {
+  static Future<void> show(BuildContext context, {Job? job}) async {
     /// The context is from jobs_page instead of new_jobs_page
     /// instead of few lines bellow where the context is from the new_jobs_page
     final database = Provider.of<Database>(context, listen: false);
     await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => NewJobPage(database: database),
+        builder: (context) => JobPageDetail(database: database, job: job),
         fullscreenDialog: true,
       ),
     );
   }
 
   @override
-  _NewJobPageState createState() => _NewJobPageState();
+  _JobPageDetailState createState() => _JobPageDetailState();
 }
 
-class _NewJobPageState extends State<NewJobPage> {
+class _JobPageDetailState extends State<JobPageDetail> {
   GlobalKey<FormState> _formKey = GlobalKey();
   String? _name;
   int? _ratePerHour;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.job != null) {
+      _name = widget.job!.name;
+      _ratePerHour = widget.job!.ratePerHour;
+    }
+  }
 
   bool _validateAndSaveForm() {
     final form = _formKey.currentState!;
@@ -41,9 +51,6 @@ class _NewJobPageState extends State<NewJobPage> {
 
   void _submit() async {
     if (_validateAndSaveForm()) {
-      print('Form Saved');
-      print('Name: $_name');
-      print('Rate: $_ratePerHour');
       ProgressDialog.show(context);
       try {
         /// Testing repeated Job firstable
@@ -84,12 +91,12 @@ class _NewJobPageState extends State<NewJobPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 2,
-        title: Text('New Job'),
+        title: Text(widget.job == null ? 'New Job' : 'Edit Job'),
         actions: [
           TextButton(
             onPressed: _submit,
             child: Text(
-              'Save',
+              widget.job == null ? 'Save' : 'Edit',
               style: TextStyle(
                 fontSize: 18,
                 color: Colors.white,
@@ -130,18 +137,19 @@ class _NewJobPageState extends State<NewJobPage> {
   List<Widget> _buildFormChildren() {
     return [
       TextFormField(
+        initialValue: _name,
         decoration: InputDecoration(labelText: 'Job name'),
         onSaved: (value) => _name = value,
         validator: (value) => value!.isNotEmpty ? null : 'Name canot be empty',
       ),
       TextFormField(
+        initialValue: _ratePerHour != null ? _ratePerHour.toString() : null,
         decoration: InputDecoration(labelText: 'Rate per hour'),
         keyboardType: TextInputType.numberWithOptions(
           signed: false,
           decimal: false,
         ),
         onSaved: (value) {
-          print('Value: $value');
           _ratePerHour = 0;
           if (value != '') {
             try {
