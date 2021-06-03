@@ -57,6 +57,10 @@ class _JobPageDetailState extends State<JobPageDetail> {
         /// .first is very important to have the newest version of the data IMPORTANT
         final jobs = await widget.database.jobsStream().first;
         final allNames = jobs!.map((job) => job.name).toList();
+        // Exclude the curren JOBNAME from the list of allNames
+        if (widget.job != null) {
+          allNames.remove(widget.job!.name);
+        }
         if (allNames.contains(_name)) {
           ProgressDialog.dissmiss(context);
           TextDialog.alert(
@@ -67,8 +71,9 @@ class _JobPageDetailState extends State<JobPageDetail> {
           );
         } else {
           ProgressDialog.dissmiss(context);
-          final job = Job(name: _name!, ratePerHour: _ratePerHour!);
-          await widget.database.createJob(job);
+          final id = widget.job?.id ?? documentIdFromCurrentDate();
+          final job = Job(name: _name!, ratePerHour: _ratePerHour!, id: id);
+          await widget.database.setJob(job);
           Navigator.of(context).pop();
         }
       } on FirebaseException catch (err) {
@@ -96,7 +101,7 @@ class _JobPageDetailState extends State<JobPageDetail> {
           TextButton(
             onPressed: _submit,
             child: Text(
-              widget.job == null ? 'Save' : 'Edit',
+              'Save',
               style: TextStyle(
                 fontSize: 18,
                 color: Colors.white,
