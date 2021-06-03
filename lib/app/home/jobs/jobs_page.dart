@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quiztoyou/app/home/jobs/jobs_list_tile.dart';
 import 'package:quiztoyou/app/home/jobs/new_job_page.dart';
 import 'package:quiztoyou/app/home/models/job.dart';
 import 'package:quiztoyou/common_widgets/dialog.dart';
@@ -74,7 +75,12 @@ class JobsPage extends StatelessWidget {
         if (snapshot.hasData) {
           final jobs = snapshot.data!;
           final children = jobs
-              .map((job) => Text('JOB: ${job.name} ––> ${job.ratePerHour}'))
+              .map(
+                (job) => JobsListTile(
+                  job: job,
+                  onTap: () {},
+                ),
+              )
               .toList();
           return ListView(children: children);
         }
