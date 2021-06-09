@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quiztoyou/app/home/jobs/empty_content.dart';
 import 'package:quiztoyou/app/home/jobs/jobs_list_tile.dart';
 import 'package:quiztoyou/app/home/jobs/job_page_detail.dart';
+import 'package:quiztoyou/app/home/jobs/list_items_builder.dart';
 import 'package:quiztoyou/app/home/models/job.dart';
 import 'package:quiztoyou/common_widgets/dialog.dart';
 import 'package:quiztoyou/services/auth.dart';
@@ -72,22 +74,38 @@ class JobsPage extends StatelessWidget {
     return StreamBuilder<List<Job>?>(
       stream: database.jobsStream(),
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final jobs = snapshot.data!;
-          final children = jobs
-              .map(
-                (job) => JobsListTile(
-                  job: job,
-                  onTap: () => JobPageDetail.show(context, job: job),
-                ),
-              )
-              .toList();
-          return ListView(children: children);
+        bool testing = false;
+        if (testing) {
+          return ListItemsBuilder<Job>(
+            snapshot: snapshot,
+            itemBuilder: (context, job) => JobsListTile(
+              job: job,
+              onTap: () => JobPageDetail.show(context, job: job),
+            ),
+          );
+        } else {
+          if (snapshot.hasData) {
+            final jobs = snapshot.data!;
+            if (jobs.isNotEmpty) {
+              final children = jobs
+                  .map(
+                    (job) => JobsListTile(
+                      job: job,
+                      onTap: () => JobPageDetail.show(context, job: job),
+                    ),
+                  )
+                  .toList();
+              return ListView(children: children);
+            }
+            return EmptyContent(
+              title: 'There is not content',
+            );
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text('Some error occurred'));
+          }
+          return Center(child: CircularProgressIndicator());
         }
-        if (snapshot.hasError) {
-          return Center(child: Text('Some error occurred'));
-        }
-        return Center(child: CircularProgressIndicator());
       },
     );
   }
